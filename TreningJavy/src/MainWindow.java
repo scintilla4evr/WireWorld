@@ -1,6 +1,10 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.TextArea;
 
 import javax.swing.JButton;
@@ -17,7 +21,7 @@ public class MainWindow {
 
 	public MainWindow() {
 		buildMainWindow();
-		buildMenu();
+		buildControlPanel();
 	}
 	
 	private void buildMainWindow() {
@@ -35,7 +39,7 @@ public class MainWindow {
 		
 	}
 	
-	private void buildMenu() {
+	private void buildControlPanel() {
 		JButton goHomeBtn = new JButton("go home");
 		JButton pauseBtn = new JButton("pause");
 		JButton structBtn = new JButton("structs");
@@ -56,29 +60,60 @@ public class MainWindow {
 		pauseBtn.setActionCommand("pauseBtn");
 		structBtn.setActionCommand("structBtn");
 		
+		//wszystkie actions listenery:
 		goHomeBtn.addActionListener(new ButtonClickListener());
 		pauseBtn.addActionListener(new ButtonClickListener());
 		structBtn.addActionListener(new ButtonClickListener());
 		speedSlider.addChangeListener(new SliderChangeListener());
 
+		controlPanel.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		
 	//trzeba je dodac do controlPanel ale nie trzeba ju¿ bezpoœrednio do mainWindow bo controlPanel jest do niego dodany, wiêc i przyciski poœrednio s¹ dodane
-		controlPanel.add(goHomeBtn);
+	//mamy wyobrazon¹ siatkê a x, y to pozycje na niej a nie odleg³oœci, tutaj wszystko jest wzglêdne
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(10,10,10,10);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		controlPanel.add(goHomeBtn,gbc);
 		
-		controlPanel.add(numOfGensLabel);
-		controlPanel.add(numOfGensTA);
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		controlPanel.add(numOfGensLabel,gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		controlPanel.add(numOfGensTA,gbc);
 		
-		controlPanel.add(rowsLabel);
-		controlPanel.add(rowsTA);
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		controlPanel.add(rowsLabel,gbc);
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		controlPanel.add(rowsTA,gbc);
 		
-		controlPanel.add(columnsLabel);
-		controlPanel.add(columnsTA);
+		gbc.gridx = 3;
+		gbc.gridy = 0;
+		controlPanel.add(columnsLabel,gbc);
+		gbc.gridx = 3;
+		gbc.gridy = 1;
+		controlPanel.add(columnsTA,gbc);
 		
-		controlPanel.add(speedLabel);
-		controlPanel.add(speedSlider);
+		gbc.gridx = 4;
+		gbc.gridy = 0;
+		controlPanel.add(speedLabel,gbc);
+		gbc.gridx = 4;
+		gbc.gridy = 1;
+		controlPanel.add(speedSlider,gbc);
+		gbc.gridx = 4;
+		gbc.gridy = 2;
 		controlPanel.add(currentSpeedLabel);
 		
-		controlPanel.add(pauseBtn);
-		controlPanel.add(structBtn);
+		gbc.gridx = 6;
+		gbc.gridy = 1;
+		controlPanel.add(pauseBtn,gbc);
+		gbc.gridx = 7;
+		gbc.gridy = 1;
+		controlPanel.add(structBtn,gbc);
 		
 	}
 	
