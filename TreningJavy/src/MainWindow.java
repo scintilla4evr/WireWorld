@@ -45,15 +45,16 @@ public class MainWindow {
 		JButton goHomeBtn = new JButton("go home");
 		JButton pauseBtn = new JButton("pause");
 		JButton structBtn = new JButton("structs");
-		TextArea rowsTA = new TextArea("default value", 1, 8); //tekst zachêty, iloœæ rzêdów i kolumn, mo¿na usun¹æ scrollbary
-		TextArea columnsTA = new TextArea("default value", 1, 8);
-		TextArea numOfGensTA = new TextArea("default value", 1, 8);
+		TextArea rowsTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE); //tekst zachêty, iloœæ rzêdów i kolumn, mo¿na usun¹æ scrollbary
+		TextArea columnsTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
+		TextArea numOfGensTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
 		JLabel rowsLabel = new JLabel("rows:");
 		JLabel columnsLabel = new JLabel("columns:");
 		JLabel numOfGensLabel = new JLabel("number of generations:");
 		JLabel speedLabel = new JLabel("animation speed:");
 		JSlider speedSlider = new JSlider(1,10,5);
 		currentSpeedLabel = new JLabel("5");
+		
 		
 		//to jest tylko po to aby ButtonClickListener mogl obslugiwac te przyciski bez dostepu do nich bezposrednio
 		goHomeBtn.setActionCommand("goHomeBtn");
@@ -70,9 +71,9 @@ public class MainWindow {
 	//trzeba je dodac do controlPanel ale nie trzeba ju¿ bezpoœrednio do mainWindow bo controlPanel jest do niego dodany, wiêc i przyciski poœrednio s¹ dodane
 	//mamy wyobrazon¹ siatkê a x, y to pozycje na niej a nie odleg³oœci, tutaj wszystko jest wzglêdne
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(0,10,0,10);
+		gbc.insets = new Insets(0,15,0,15);
 		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridy = 1;
 		controlPanel.add(goHomeBtn,gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 0;
@@ -116,10 +117,12 @@ public class MainWindow {
 		//beda wczytane z TextArea:
 		int rows=10;
 		int cols=10;
+		
 		gbc.gridwidth = cols;
 		gbc.gridheight = rows;
 		Board board = new Board(rows,cols);
 		gbc.insets = new Insets(1,1,1,1);
+		
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
 			{

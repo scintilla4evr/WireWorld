@@ -3,6 +3,7 @@ import java.awt.Color;
 import javax.swing.JButton;
 
 public class Cell extends JButton { //wspolna dla obu gier
+	private static final long serialVersionUID = -7309940893358748305L;
 	private byte state;
 	private byte nextState;
 	private Color color;

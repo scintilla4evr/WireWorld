@@ -27,11 +27,14 @@ public class Board {
 	}
 	
 	public void initializeBoard() {
+		BoardClickListener bcl = new BoardClickListener(rows, cols, this); //wspolny dla wszystkich z oszczednosci pamieci
 		board = new Cell [rows][cols];
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
 			{
 				board[i][j] = new Cell(C.OFF, C.OFF);
+				board[i][j].setActionCommand(i+" "+j);
+				board[i][j].addActionListener(bcl); //kazdemu przyciskowi dodajemy ActionListener
 			}
 	}
 	
