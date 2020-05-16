@@ -9,7 +9,7 @@ public class Cell extends JButton { //wspolna dla obu gier
 	private Color color;
 	
 	public Cell(byte state, byte nextState) {
-		super("b");
+		super();
 		this.state = state;
 		this.nextState = nextState;
 	}

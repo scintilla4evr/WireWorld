@@ -2,21 +2,30 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.TextArea;
+import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JSplitPane;
 
 public class MainWindow {
 	
 	private JFrame mainWindow;
+	private JSplitPane horizontalSplitPanel;
 	private JPanel controlPanel;
 	private JPanel displayPanel; //panel do wyswietlania planszy i klikania w ni¹
 	public static JLabel currentSpeedLabel; // to jest tu tylko dlatego ¿e potzrebowa³em mieæ do tego dostêp z innej klasy, to wyj¹tek, nie regu³a
+	
+	public static double windowHeight;
+	public static double windowWidth;
+	private int rows = 100; //wartosci domyslne, zmieniane prze usera lub przez wgranie pliku
+	private int cols = 100;
 
 	public MainWindow() {
 		buildMainWindow();
@@ -26,15 +35,19 @@ public class MainWindow {
 	
 	private void buildMainWindow() {
 		mainWindow = new JFrame("Uniwersalny automat komórkowy"); 
-		mainWindow.setMinimumSize(new Dimension(1500,1000));
-		mainWindow.setMaximumSize(new Dimension(1500,1000));
-		mainWindow.setLayout(new BorderLayout()); //dzieli okno na 3 rzêdy i 8 kolumn
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		windowHeight = screenSize.height;
+		windowWidth = screenSize.width;
+		mainWindow.setSize(screenSize);
+		mainWindow.setMinimumSize(screenSize);
+		mainWindow.setMaximumSize(screenSize);
+		mainWindow.setLayout(new BorderLayout()); 
 		
 		controlPanel = new JPanel(new GridBagLayout()); //to bêdzie nasze menu
-		displayPanel = new JPanel(new GridBagLayout());
+		displayPanel = new JPanel(new GridLayout(rows, cols));
 		
 		mainWindow.add(controlPanel,BorderLayout.NORTH); //kazdy element nale¿y dodaæ do okna, a niektóre tylko do odpowiadaj¹cej struktury która ju¿ jest dodana do okna
-		mainWindow.add(displayPanel,BorderLayout.SOUTH);
+		mainWindow.add(displayPanel,BorderLayout.CENTER);
 		
 		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //klikniêcie zamnkniêcia wy³¹cza okno
 		mainWindow.setVisible(true); //aby okno by³o widoczne, dla false jest niewidzialne
@@ -112,12 +125,6 @@ public class MainWindow {
 	
 	private void buildDisplayPanel() {
 		GridBagConstraints gbc = new GridBagConstraints(); //dla displayPlanel
-		//tutaj wywolamy klasy ktore opisuja plansze i jej zachowanie
-		
-		//beda wczytane z TextArea:
-		int rows=10;
-		int cols=10;
-		
 		gbc.gridwidth = cols;
 		gbc.gridheight = rows;
 		Board board = new Board(rows,cols);
@@ -130,6 +137,5 @@ public class MainWindow {
 				gbc.gridx = j;
 				displayPanel.add(board.getCell(i, j),gbc);
 			}
-		
 	}
 }
