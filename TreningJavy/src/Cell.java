@@ -31,5 +31,22 @@ public class Cell extends JButton { //wspolna dla obu gier
 	public void setNextState(byte nextState) {
 		this.nextState = nextState;
 	}
+	public void updateState() {
+		this.state = this.nextState;
+		this.nextState = C.OFF;
+	}
+	public void updateColorToMatchState() {
+		if(state == C.OFF)
+			color = Color.BLACK;
+		else if(state == C.ON)
+			color = Color.ORANGE;
+		else if(state == C.HEAD)
+			color = color.BLUE;
+		else if(state == C.TAIL)
+			color = color.RED;
+		else if(state == C.PADD)
+			color = color.GREEN;
+	}
+	
 	
 }

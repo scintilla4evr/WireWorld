@@ -6,26 +6,28 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.TextArea;
 import java.awt.Toolkit;
+import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.JSplitPane;
 
-public class MainWindow {
+public class MainWindow{
 	
 	private JFrame mainWindow;
-	private JSplitPane horizontalSplitPanel;
 	private JPanel controlPanel;
 	private JPanel displayPanel; //panel do wyswietlania planszy i klikania w ni¹
 	public static JLabel currentSpeedLabel; // to jest tu tylko dlatego ¿e potzrebowa³em mieæ do tego dostêp z innej klasy, to wyj¹tek, nie regu³a
 	
 	public static double windowHeight;
 	public static double windowWidth;
-	private int rows = 100; //wartosci domyslne, zmieniane prze usera lub przez wgranie pliku
-	private int cols = 100;
+	private int rows = 50; //wartosci domyslne, zmieniane prze usera lub przez wgranie pliku
+	private int cols = 50;
+	public static byte choosenGame = C.GOL;
+	public static int speed = 1000; // w miliseconds
+	public static Board board; //teraz juz definitywnie mozna miec otwart¹ na raz tylko 1 kopie tego okna
 
 	public MainWindow() {
 		buildMainWindow();
@@ -58,6 +60,7 @@ public class MainWindow {
 		JButton goHomeBtn = new JButton("go home");
 		JButton pauseBtn = new JButton("pause");
 		JButton structBtn = new JButton("structs");
+		JButton startBtn = new JButton("start");
 		TextArea rowsTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE); //tekst zachêty, iloœæ rzêdów i kolumn, mo¿na usun¹æ scrollbary
 		TextArea columnsTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
 		TextArea numOfGensTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
@@ -73,11 +76,13 @@ public class MainWindow {
 		goHomeBtn.setActionCommand("goHomeBtn");
 		pauseBtn.setActionCommand("pauseBtn");
 		structBtn.setActionCommand("structBtn");
+		startBtn.setActionCommand("startBtn");
 		
 		//wszystkie actions listenery:
 		goHomeBtn.addActionListener(new ButtonClickListener());
 		pauseBtn.addActionListener(new ButtonClickListener());
 		structBtn.addActionListener(new ButtonClickListener());
+		startBtn.addActionListener(new ButtonClickListener());
 		speedSlider.addChangeListener(new SliderChangeListener());
 		
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -121,15 +126,31 @@ public class MainWindow {
 		gbc.gridx = 7;
 		gbc.gridy = 1;
 		controlPanel.add(structBtn,gbc);
+		gbc.gridx = 8;
+		gbc.gridy = 1;
+		controlPanel.add(startBtn,gbc);
 	}
 	
-	private void buildDisplayPanel() {
+	private void buildDisplayPanel() { 
+
 		GridBagConstraints gbc = new GridBagConstraints(); //dla displayPlanel
 		gbc.gridwidth = cols;
 		gbc.gridheight = rows;
-		Board board = new Board(rows,cols);
 		gbc.insets = new Insets(1,1,1,1);
 		
+		try {
+			LoadBoardFromFile lbff = new LoadBoardFromFile();
+			rows = lbff.getRows();
+			cols = lbff.getCols();
+			board = lbff.loadBoardFromFile("example.life");		
+			if(board == null) throw new FileNotFoundException();
+		}
+		catch(FileNotFoundException ex) {
+			System.out.println("Couldnt find file");
+			//przypisanie wartosci z TextArea dla rows i cols
+		}
+		
+		//board = new Board(rows, cols); // to wyswietla a LoadBoardFromFile jakos nie
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
 			{
@@ -137,5 +158,6 @@ public class MainWindow {
 				gbc.gridx = j;
 				displayPanel.add(board.getCell(i, j),gbc);
 			}
+		
 	}
 }

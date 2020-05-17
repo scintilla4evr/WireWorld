@@ -36,12 +36,11 @@ columns: 64
 
 legend to numbers:
 	universal:
-		PADDING = 5
+		PADDING = 4
 		OFF = 0
 	for GOL only:
 		ON = 1
 	for WW only:
 		HEAD = 2
 		TAIL = 3
-		CONDUCTOR = 4
 		
