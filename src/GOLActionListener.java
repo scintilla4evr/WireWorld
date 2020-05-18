@@ -5,8 +5,9 @@ public class GOLActionListener implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		MainWindow.board.calculateNextStateGOL();
-		MainWindow.board.updateBoard();
+		//MainWindow.board.calculateNextStateGOL();
+		//MainWindow.board.updateBoard();
+		;
 	}
 
 }

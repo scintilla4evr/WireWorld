@@ -12,6 +12,7 @@ public class Cell extends JButton { //wspolna dla obu gier
 		super();
 		this.state = state;
 		this.nextState = nextState;
+		updateColorToMatchState();
 	}
 	public Color getColor() {
 		return color;
@@ -22,8 +23,9 @@ public class Cell extends JButton { //wspolna dla obu gier
 	public byte getState() {
 		return state;
 	}
-	public void setState(byte state) {
+	public void setState(byte state) { //za kazdym razem gdy ktos zmienia stan kolor sie sam uaktualnia
 		this.state = state;
+		this.updateColorToMatchState();
 	}
 	public byte getNextState() {
 		return nextState;
@@ -33,7 +35,7 @@ public class Cell extends JButton { //wspolna dla obu gier
 	}
 	public void updateState() {
 		this.state = this.nextState;
-		this.nextState = C.OFF;
+		this.updateColorToMatchState();
 	}
 	public void updateColorToMatchState() {
 		if(state == C.OFF)
@@ -44,8 +46,9 @@ public class Cell extends JButton { //wspolna dla obu gier
 			color = color.BLUE;
 		else if(state == C.TAIL)
 			color = color.RED;
-		else if(state == C.PADD)
+		else if(state == C.PADD) //uwzglednic padding
 			color = color.GREEN;
+		this.setBackground(color);
 	}
 	
 	

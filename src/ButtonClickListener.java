@@ -8,6 +8,7 @@ public class ButtonClickListener implements ActionListener {
 	// obsluguje przyciski z menu w MainWindow - mowi co sie stanie po kliknieciu
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		/*
 		String command = e.getActionCommand();
 	
 		if(command.equals("goHomeBtn")) {
@@ -30,6 +31,7 @@ public class ButtonClickListener implements ActionListener {
 		}
 		else if(command.equals("structBtn")) {
 			;
+			*/
 		}
 		
 	}

@@ -1,61 +1,48 @@
 import java.io.File;
-
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 //uniwersalna klasa do wczytywania z pliku .life dla GOL oraz WW, potencjalnie rozszerzalna dla innej gry
 public class LoadBoardFromFile {
-	private int rows;
-	private int cols;
-	
-	public int getRows() {
-		return rows;
-	}
 
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
-
-	public int getCols() {
-		return cols;
-	}
-
-	public void setCols(int cols) {
-		this.cols = cols;
-	}
-
-	public Board loadBoardFromFile(String fileName) throws FileNotFoundException {
+	public static Board loadBoardFromFile(String fileName) {
 		try {
 			String buffer;
-			Scanner s = new Scanner(new File("C:/Users/Kuba/eclipse-workspace/TreningJavy/src/" + fileName)); //TU MUSISZ MIEC INNA SCIEZKE DOSTEPU
+			Scanner s = new Scanner(new File("C:\\Users\\Kuba\\eclipse-workspace\\WireWorld\\src\\" + fileName)); //TU MUSISZ MIEC INNA SCIEZKE DOSTEPU
 			s.next();
-			rows = s.nextInt();
-			//System.out.println(rows);
+			int rows = s.nextInt()+2; //+2 dla paddingu
 			s.next();
-			cols = s.nextInt();
-			//System.out.println(cols);
+			int cols = s.nextInt()+2;
 			Board board = new Board(rows, cols);
 			s.nextLine();
 			s.nextLine();
 			
-			for(int i=0; i<rows; i++)
+			int i = 0;
+			for(int j=0; j<cols; j++)
+				board.getCell(i, j).setState(C.PADD);
+			i = rows-1;
+			for(int j=0; j<cols; j++)
+				board.getCell(i, j).setState(C.PADD);
+			
+			for(i=1; i<rows-1; i++)
 			{
 				buffer = s.nextLine().trim();
 				for(int j=0; j<cols; j++)
 				{
-					if(buffer.charAt(j)-'0' == (int)C.OFF)
-						board.getCell(i, j).setState(C.OFF);
-					else if(buffer.charAt(j)-'0' == (int)C.ON)
-						board.getCell(i, j).setState(C.ON);
-					else if(buffer.charAt(j)-'0' == (int)C.PADD)
+					if(j==0 || j==cols-1)
+					{
 						board.getCell(i, j).setState(C.PADD);
-					else if(buffer.charAt(j)-'0' == (int)C.HEAD)
+						continue;
+					}
+					if(buffer.charAt(j-1)-'0' == (int)C.ON)
+						board.getCell(i, j).setState(C.ON);
+					else if(buffer.charAt(j-1)-'0' == (int)C.OFF)
+						board.getCell(i, j).setState(C.OFF);
+					else if(buffer.charAt(j-1)-'0' == (int)C.HEAD)
 						board.getCell(i, j).setState(C.HEAD);
-					else if(buffer.charAt(j)-'0' == (int)C.TAIL)
+					else if(buffer.charAt(j-1)-'0' == (int)C.TAIL)
 						board.getCell(i, j).setState(C.TAIL);
-					//System.out.print(buffer.charAt(j));
 				}
-				//System.out.println("");
 			}
 			s.close();
 			return board;

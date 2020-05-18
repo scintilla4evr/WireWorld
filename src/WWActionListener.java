@@ -5,8 +5,9 @@ public class WWActionListener implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		MainWindow.board.calculateNextStateWW();
-		MainWindow.board.updateBoard();
+		//MainWindow.board.calculateNextStateWW();
+		//MainWindow.board.updateBoard();
+		;
 	}
 
 }

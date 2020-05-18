@@ -29,33 +29,33 @@ public class Board {
 	
 	public void initializeBoard() {
 		BoardClickListener bcl = new BoardClickListener(rows, cols, this); //wspolny dla wszystkich z oszczednosci pamieci
-		Dimension d = calculateCellSize();
+		Dimension d = new Dimension(MainWindow.cellSideSize, MainWindow.cellSideSize);
 		board = new Cell [rows][cols];
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
 			{
-				board[i][j] = new Cell(C.OFF, C.OFF);
+				if(i==0 || j==0 || i==rows-1 || j==cols-1)
+				{
+					board[i][j] = new Cell(C.PADD, C.PADD);
+					//board[i][j].setPreferredSize(d);
+					continue;
+				}
+				board[i][j] = new Cell(C.OFF, C.OFF); //na start wy³¹czona komórka
 				board[i][j].setActionCommand(i+" "+j);
 				board[i][j].addActionListener(bcl); //kazdemu przyciskowi dodajemy ActionListener
-				board[i][j].setSize(d); //nie dzila nie wiem czemu
-				
+				//board[i][j].setPreferredSize(d); //zwiazany z rozmiarem MainWindow				
 			}
-	}
-	
-	private Dimension calculateCellSize() {
-		int height = (int)MainWindow.windowHeight/rows;
-		int width = (int)MainWindow.windowWidth/cols;
-		int smallerSize = Integer.min(height, width);
-		return new Dimension(smallerSize,smallerSize);
+	}	
+	public void changeCellsSize(Dimension d) {
+		for(int i=0; i<rows; i++)
+			for(int j=0; j<cols; j++)
+				board[i][j].setPreferredSize(d);
 	}
 	
 	public void updateBoard() {
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
-			{
 				board[i][j].updateState();
-				board[i][j].updateColorToMatchState();
-			}
 	}
 	
 	public void calculateNextStateGOL() {

@@ -1,12 +1,12 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.TextArea;
 import java.awt.Toolkit;
-import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,20 +15,33 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 public class MainWindow{
+	public static Dimension screenSize;
+	public static byte choosenGame = C.GOL;
+	public static int cellSideSize;
+	private int rows;
+	private int cols;
 	
 	private JFrame mainWindow;
 	private JPanel controlPanel;
-	private JPanel displayPanel; //panel do wyswietlania planszy i klikania w ni¹
-	public static JLabel currentSpeedLabel; // to jest tu tylko dlatego ¿e potzrebowa³em mieæ do tego dostêp z innej klasy, to wyj¹tek, nie regu³a
+	private JPanel displayPanel; 
+	private JPanel leftMargin;
+	private JPanel rightMargin;
+	private Board board;
 	
-	public static double windowHeight;
-	public static double windowWidth;
-	private int rows = 50; //wartosci domyslne, zmieniane prze usera lub przez wgranie pliku
-	private int cols = 50;
-	public static byte choosenGame = C.GOL;
-	public static int speed = 1000; // w miliseconds
-	public static Board board; //teraz juz definitywnie mozna miec otwart¹ na raz tylko 1 kopie tego okna
-
+	private JButton goHomeBtn;
+	private JButton pauseBtn;
+	private JButton structBtn;
+	private JButton startBtn;
+	private TextArea rowsTA;
+	private TextArea columnsTA;
+	private TextArea numOfGensTA;
+	private JLabel rowsLabel;
+	private JLabel columnsLabel;
+	private JLabel numOfGensLabel;
+	private JLabel speedLabel;
+	private JLabel currentSpeedLabel;
+	private JSlider speedSlider;
+	
 	public MainWindow() {
 		buildMainWindow();
 		buildControlPanel();
@@ -37,19 +50,24 @@ public class MainWindow{
 	
 	private void buildMainWindow() {
 		mainWindow = new JFrame("Uniwersalny automat komórkowy"); 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		windowHeight = screenSize.height;
-		windowWidth = screenSize.width;
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setSize(screenSize);
 		mainWindow.setMinimumSize(screenSize);
 		mainWindow.setMaximumSize(screenSize);
 		mainWindow.setLayout(new BorderLayout()); 
 		
-		controlPanel = new JPanel(new GridBagLayout()); //to bêdzie nasze menu
-		displayPanel = new JPanel(new GridLayout(rows, cols));
+		controlPanel = new JPanel(new GridBagLayout()); 
+		displayPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,0)); 
+		leftMargin = new JPanel();
+		rightMargin = new JPanel();
 		
+		//leftMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height)); // tu bedzie zabawa aby odpowiednio dobrac te wartosci!
+		//rightMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height));
+	
 		mainWindow.add(controlPanel,BorderLayout.NORTH); //kazdy element nale¿y dodaæ do okna, a niektóre tylko do odpowiadaj¹cej struktury która ju¿ jest dodana do okna
 		mainWindow.add(displayPanel,BorderLayout.CENTER);
+		mainWindow.add(leftMargin,BorderLayout.WEST);
+		mainWindow.add(rightMargin,BorderLayout.EAST);
 		
 		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //klikniêcie zamnkniêcia wy³¹cza okno
 		mainWindow.setVisible(true); //aby okno by³o widoczne, dla false jest niewidzialne
@@ -57,18 +75,18 @@ public class MainWindow{
 	}
 	
 	private void buildControlPanel() {
-		JButton goHomeBtn = new JButton("go home");
-		JButton pauseBtn = new JButton("pause");
-		JButton structBtn = new JButton("structs");
-		JButton startBtn = new JButton("start");
-		TextArea rowsTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE); //tekst zachêty, iloœæ rzêdów i kolumn, mo¿na usun¹æ scrollbary
-		TextArea columnsTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
-		TextArea numOfGensTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
-		JLabel rowsLabel = new JLabel("rows:");
-		JLabel columnsLabel = new JLabel("columns:");
-		JLabel numOfGensLabel = new JLabel("number of generations:");
-		JLabel speedLabel = new JLabel("animation speed:");
-		JSlider speedSlider = new JSlider(1,10,5);
+		goHomeBtn = new JButton("go home");
+		pauseBtn = new JButton("pause");
+		structBtn = new JButton("structs");
+		startBtn = new JButton("start");
+		rowsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE); //tekst zachêty, iloœæ rzêdów i kolumn, mo¿na usun¹æ scrollbary
+		columnsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE);
+		numOfGensTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
+		rowsLabel = new JLabel("rows:");
+		columnsLabel = new JLabel("columns:");
+		numOfGensLabel = new JLabel("number of generations:");
+		speedLabel = new JLabel("animation speed:");
+		speedSlider = new JSlider(1,10,5);
 		currentSpeedLabel = new JLabel("5");
 		
 		
@@ -83,7 +101,7 @@ public class MainWindow{
 		pauseBtn.addActionListener(new ButtonClickListener());
 		structBtn.addActionListener(new ButtonClickListener());
 		startBtn.addActionListener(new ButtonClickListener());
-		speedSlider.addChangeListener(new SliderChangeListener());
+		speedSlider.addChangeListener(new SliderChangeListener(this));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 	//trzeba je dodac do controlPanel ale nie trzeba ju¿ bezpoœrednio do mainWindow bo controlPanel jest do niego dodany, wiêc i przyciski poœrednio s¹ dodane
@@ -129,35 +147,30 @@ public class MainWindow{
 		gbc.gridx = 8;
 		gbc.gridy = 1;
 		controlPanel.add(startBtn,gbc);
+		
 	}
 	
 	private void buildDisplayPanel() { 
-
-		GridBagConstraints gbc = new GridBagConstraints(); //dla displayPlanel
-		gbc.gridwidth = cols;
-		gbc.gridheight = rows;
-		gbc.insets = new Insets(1,1,1,1);
+		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
+		if(board == null)
+			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu
+		rows = board.getRows(); 
+		cols = board.getCols();
 		
-		try {
-			LoadBoardFromFile lbff = new LoadBoardFromFile();
-			rows = lbff.getRows();
-			cols = lbff.getCols();
-			board = lbff.loadBoardFromFile("example.life");		
-			if(board == null) throw new FileNotFoundException();
-		}
-		catch(FileNotFoundException ex) {
-			System.out.println("Couldnt find file");
-			//przypisanie wartosci z TextArea dla rows i cols
-		}
+		cellSideSize = (screenSize.height - controlPanel.getSize().height)/rows;
+		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
 		
-		//board = new Board(rows, cols); // to wyswietla a LoadBoardFromFile jakos nie
-		for(int i=0; i<rows; i++)
+		for(int i=0; i<rows; i++) //dodanie kazdego przycisku do JPanel'u 
 			for(int j=0; j<cols; j++)
-			{
-				gbc.gridy = i;
-				gbc.gridx = j;
-				displayPanel.add(board.getCell(i, j),gbc);
-			}
-		
+				displayPanel.add(board.getCell(i, j));
+
 	}
+	
+	public int getCurrentSpeedLabel() {
+		return Integer.parseInt(currentSpeedLabel.getText());
+	}
+	public void setCurrentSpeedLabel(int currentSpeed) {
+		currentSpeedLabel.setText(String.valueOf(currentSpeed));
+	}
+	
 }
