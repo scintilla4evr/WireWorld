@@ -31,8 +31,8 @@ public class ButtonClickListener implements ActionListener {
 		}
 		else if(command.equals("structBtn")) {
 			;
-			*/
-		}
+			
+		} */
 		
 	}
 }

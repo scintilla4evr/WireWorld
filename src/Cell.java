@@ -43,11 +43,11 @@ public class Cell extends JButton { //wspolna dla obu gier
 		else if(state == C.ON)
 			color = Color.ORANGE;
 		else if(state == C.HEAD)
-			color = color.BLUE;
+			color = Color.BLUE;
 		else if(state == C.TAIL)
-			color = color.RED;
+			color = Color.RED;
 		else if(state == C.PADD) //uwzglednic padding
-			color = color.GREEN;
+			color = Color.GREEN;
 		this.setBackground(color);
 	}
 	
