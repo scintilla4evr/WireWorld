@@ -23,7 +23,7 @@ public class Board {
 	public void setCols(int cols) {
 		this.cols = cols;
 	}
-	public Cell getCell(int r, int c) { //uzycie np. board.getCell(1,1).getState() da stan tej komorki itp.
+	public Cell getCell(int r, int c) { //uzycie np. board.getCell(1,1).getState() da stan tej komorki itp. -- moze zamiast tego metoda getState(int, int) ?
 		return board[r][c];
 	}
 	
@@ -40,7 +40,7 @@ public class Board {
 					//board[i][j].setPreferredSize(d);
 					continue;
 				}
-				board[i][j] = new Cell(C.OFF, C.OFF); //na start wy³¹czona komórka
+				board[i][j] = new Cell(C.OFF, C.OFF); //na start wyï¿½ï¿½czona komï¿½rka
 				board[i][j].setActionCommand(i+" "+j);
 				board[i][j].addActionListener(bcl); //kazdemu przyciskowi dodajemy ActionListener
 				//board[i][j].setPreferredSize(d); //zwiazany z rozmiarem MainWindow				

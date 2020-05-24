@@ -14,9 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
-public class MainWindow{
+public class MainWindow {
 	public static Dimension screenSize;
-	public static byte choosenGame = C.GOL;
+	public static byte chosenGame = C.GOL;
 	public static int cellSideSize;
 	private int rows;
 	private int cols;
@@ -49,10 +49,10 @@ public class MainWindow{
 	}
 	
 	private void buildMainWindow() {
-		mainWindow = new JFrame("Uniwersalny automat komórkowy"); 
+		mainWindow = new JFrame("Uniwersalny automat komÃ³rkowy"); 
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setSize(screenSize);
-		mainWindow.setMinimumSize(screenSize);
+		mainWindow.setMinimumSize(screenSize);  //nie wiem czy to potrzebne
 		mainWindow.setMaximumSize(screenSize);
 		mainWindow.setLayout(new BorderLayout()); 
 		
@@ -64,13 +64,13 @@ public class MainWindow{
 		//leftMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height)); // tu bedzie zabawa aby odpowiednio dobrac te wartosci!
 		//rightMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height));
 	
-		mainWindow.add(controlPanel,BorderLayout.NORTH); //kazdy element nale¿y dodaæ do okna, a niektóre tylko do odpowiadaj¹cej struktury która ju¿ jest dodana do okna
+		mainWindow.add(controlPanel,BorderLayout.NORTH); //kazdy element naleÅ¼y dodaÄ‡ do okna, a niektÃ³re tylko do odpowiadajÄ…cej struktury ktÃ³ra juÅ¼ jest dodana do okna
 		mainWindow.add(displayPanel,BorderLayout.CENTER);
 		mainWindow.add(leftMargin,BorderLayout.WEST);
 		mainWindow.add(rightMargin,BorderLayout.EAST);
 		
-		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //klikniêcie zamnkniêcia wy³¹cza okno
-		mainWindow.setVisible(true); //aby okno by³o widoczne, dla false jest niewidzialne
+		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //klikniÄ™cie zamnkniÄ™cia wyÅ‚Ä…cza okno
+		mainWindow.setVisible(true); //aby okno byÅ‚o widoczne, dla false jest niewidzialne
 		
 	}
 	
@@ -79,7 +79,7 @@ public class MainWindow{
 		pauseBtn = new JButton("pause");
 		structBtn = new JButton("structs");
 		startBtn = new JButton("start");
-		rowsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE); //tekst zachêty, iloœæ rzêdów i kolumn, mo¿na usun¹æ scrollbary
+		rowsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE); //tekst zachÄ™ty, iloÅ›Ä‡ rzÄ™dÃ³w i kolumn, moÅ¼na usunÄ…Ä‡ scrollbary
 		columnsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE);
 		numOfGensTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
 		rowsLabel = new JLabel("rows:");
@@ -104,8 +104,9 @@ public class MainWindow{
 		speedSlider.addChangeListener(new SliderChangeListener(this));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
-	//trzeba je dodac do controlPanel ale nie trzeba ju¿ bezpoœrednio do mainWindow bo controlPanel jest do niego dodany, wiêc i przyciski poœrednio s¹ dodane
-	//mamy wyobrazon¹ siatkê a x, y to pozycje na niej a nie odleg³oœci, tutaj wszystko jest wzglêdne
+	//trzeba je dodaÄ‡ do controlPanel ale nie trzeba juÅ¼ bezpoÅ›rednio do mainWindow bo controlPanel 
+		//jest do niego dodany, wiÄ™c i przyciski poÅ›rednio sÄ… dodane
+	//mamy wyobrazonÄ… siatkÄ™ a x, y to pozycje na niej a nie odlegÅ‚oÅ›ci, tutaj wszystko jest wzglÄ™dne
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(0,15,0,15);
 		gbc.gridx = 0;
@@ -151,7 +152,7 @@ public class MainWindow{
 	}
 	
 	private void buildDisplayPanel() { 
-		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
+//		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu
 		rows = board.getRows(); 
@@ -161,8 +162,9 @@ public class MainWindow{
 		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
 		
 		for(int i=0; i<rows; i++) //dodanie kazdego przycisku do JPanel'u 
-			for(int j=0; j<cols; j++)
+			for(int j=0; j<cols; j++) {
 				displayPanel.add(board.getCell(i, j));
+			}
 
 	}
 	
