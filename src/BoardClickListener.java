@@ -6,7 +6,7 @@ public class BoardClickListener implements ActionListener {
 	private int cols;
 	private Board board;
 	private byte stateChangeClock = 0;
-	private String lastCommand;
+	private static String lastCommand;
 	
 	public BoardClickListener(int rows, int cols, Board board) {
 		super();
@@ -17,7 +17,6 @@ public class BoardClickListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-		lastCommand = command;
 		
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
@@ -29,6 +28,7 @@ public class BoardClickListener implements ActionListener {
 					
 					board.getCell(i,j).setState((byte)(stateChangeClock%4)); //5-1=4 to ilosc stanow do wyboru po odjeciu 4. czyli PADDING
 				}
+		lastCommand = command;	//przenioslem na dol zeby tamten if dzialal
 	}
 
 }

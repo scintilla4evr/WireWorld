@@ -40,7 +40,7 @@ public class Board {
 					//board[i][j].setPreferredSize(d);
 					continue;
 				}
-				board[i][j] = new Cell(C.OFF, C.OFF); //na start wy��czona kom�rka
+				board[i][j] = new Cell(C.OFF, C.OFF); //na start wyłączona komórka
 				board[i][j].setActionCommand(i+" "+j);
 				board[i][j].addActionListener(bcl); //kazdemu przyciskowi dodajemy ActionListener
 				//board[i][j].setPreferredSize(d); //zwiazany z rozmiarem MainWindow				

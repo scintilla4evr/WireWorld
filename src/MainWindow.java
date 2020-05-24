@@ -52,7 +52,7 @@ public class MainWindow {
 		mainWindow = new JFrame("Uniwersalny automat komórkowy"); 
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setSize(screenSize);
-		mainWindow.setMinimumSize(screenSize);  //nie wiem czy to potrzebne
+//		mainWindow.setMinimumSize(screenSize);  //nie wiem czy to potrzebne
 		mainWindow.setMaximumSize(screenSize);
 		mainWindow.setLayout(new BorderLayout()); 
 		
@@ -158,7 +158,7 @@ public class MainWindow {
 		rows = board.getRows(); 
 		cols = board.getCols();
 		
-		cellSideSize = (screenSize.height - controlPanel.getSize().height)/rows;
+		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	//tak chyba wygodniej, tez zmniejszylem do 90%
 		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
 		
 		for(int i=0; i<rows; i++) //dodanie kazdego przycisku do JPanel'u 
