@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class MainWindow {
 	public static Dimension screenSize;
@@ -56,6 +58,7 @@ public class MainWindow {
 
 	public MainWindow() {
 		buildMainWindow();
+		buildRadioButtons();
 		buildControlPanel();
 		buildDisplayPanel();
         initAnimationTimers();
@@ -109,9 +112,13 @@ public class MainWindow {
 		pauseBtn.addActionListener(new ButtonClickListener());
 		structBtn.addActionListener(new ButtonClickListener());
 		startBtn.addActionListener(new ButtonClickListener());
-		speedSlider.addChangeListener(new SliderChangeListener(this));
-		
-		buildRadioButtons();
+		speedSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int currentSpeed = ((JSlider)e.getSource()).getValue();
+				setCurrentSpeedLabel(currentSpeed);
+			}
+		});
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -164,7 +171,7 @@ public class MainWindow {
 	}
 	private void buildRadioButtons() {
 		wwRB = new JRadioButton("WireWorld", true);
-		golRB = new JRadioButton("Game Of Life");
+		golRB = new JRadioButton("Game Of Life", false);
 		wwRB.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -213,6 +220,9 @@ public class MainWindow {
 				board.updateBoard();
 			}
 		});
+	}
+	private void initSlider() {
+		
 	}
 	public int getCurrentSpeedLabel() {
 		return Integer.parseInt(currentSpeedLabel.getText());
