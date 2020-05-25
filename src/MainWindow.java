@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.TextArea;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -197,8 +199,20 @@ public class MainWindow {
 
 	}
 	private void initAnimationTimers() {
-		golAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new GOLActionListener(board));
-        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new WWActionListener(board));
+		golAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				board.calculateNextStateGOL();
+				board.updateBoard();
+			}
+		});
+        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				board.calculateNextStateWW();
+				board.updateBoard();
+			}
+		});
 	}
 	public int getCurrentSpeedLabel() {
 		return Integer.parseInt(currentSpeedLabel.getText());
