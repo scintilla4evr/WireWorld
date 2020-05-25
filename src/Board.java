@@ -23,7 +23,7 @@ public class Board {
 	public void setCols(int cols) {
 		this.cols = cols;
 	}
-	public Cell getCell(int r, int c) { //uzycie np. board.getCell(1,1).getState() da stan tej komorki itp. -- moze zamiast tego metoda getState(int, int) ?
+	public Cell getCell(int r, int c) { 
 		return board[r][c];
 	}
 	
@@ -40,7 +40,7 @@ public class Board {
 					//board[i][j].setPreferredSize(d);
 					continue;
 				}
-				board[i][j] = new Cell(C.OFF, C.OFF); //na start wyłączona komórka
+				board[i][j] = new Cell(C.OFF, C.OFF);
 				board[i][j].setActionCommand(i+" "+j);
 				board[i][j].addActionListener(bcl); //kazdemu przyciskowi dodajemy ActionListener
 				board[i][j].setPreferredSize(d); //zwiazany z rozmiarem MainWindow				
@@ -72,7 +72,7 @@ public class Board {
 				else if(cellState == C.ON && (friendsWithStateON == 2 || friendsWithStateON == 3))
 					board[i][j].setNextState(C.ON);
 				else
-					board[i][j].setNextState(C.OFF);
+					board[i][j].setNextState(C.OFF); //przydatne zabezpieczenie przeciw komorkom WW ktore sa teraz traktowane jak wylaczone
 			}
 	}
 	

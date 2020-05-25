@@ -5,7 +5,7 @@ import javax.swing.Timer;
 
 public class ButtonClickListener implements ActionListener {
 
-	// obsluguje przyciski z menu w MainWindow - mowi co sie stanie po kliknieciu
+	// obsluguje przyciski z menu w MainWindow
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		

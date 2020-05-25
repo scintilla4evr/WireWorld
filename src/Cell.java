@@ -2,7 +2,7 @@ import java.awt.Color;
 
 import javax.swing.JButton;
 
-public class Cell extends JButton { //wspolna dla obu gier
+public class Cell extends JButton { 
 	private static final long serialVersionUID = -7309940893358748305L;
 	private byte state;
 	private byte nextState;
@@ -23,9 +23,9 @@ public class Cell extends JButton { //wspolna dla obu gier
 	public byte getState() {
 		return state;
 	}
-	public void setState(byte state) { //za kazdym razem gdy ktos zmienia stan kolor sie sam uaktualnia
+	public void setState(byte state) { 
 		this.state = state;
-		this.updateColorToMatchState();
+		this.updateColorToMatchState(); //kolor sam sie uaktualnia
 	}
 	public byte getNextState() {
 		return nextState;
@@ -46,7 +46,7 @@ public class Cell extends JButton { //wspolna dla obu gier
 			color = Color.BLUE;
 		else if(state == C.TAIL)
 			color = Color.RED;
-		else if(state == C.PADD) //uwzglednic padding
+		else if(state == C.PADD) 
 			color = Color.GREEN;
 		this.setBackground(color);
 	}

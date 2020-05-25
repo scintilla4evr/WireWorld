@@ -57,7 +57,6 @@ public class MainWindow {
 		mainWindow = new JFrame("Uniwersalny automat komorkowy"); 
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setSize(screenSize);
-//		mainWindow.setMinimumSize(screenSize);  //nie wiem czy to potrzebne
 		mainWindow.setMaximumSize(screenSize);
 		mainWindow.setLayout(new BorderLayout()); 
 		
@@ -69,13 +68,13 @@ public class MainWindow {
 		//leftMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height)); // tu bedzie zabawa aby odpowiednio dobrac te wartosci!
 		//rightMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height));
 	
-		mainWindow.add(controlPanel,BorderLayout.NORTH); //kazdy element należy dodać do okna, a niektóre tylko do odpowiadającej struktury która już jest dodana do okna
+		mainWindow.add(controlPanel,BorderLayout.NORTH);
 		mainWindow.add(displayPanel,BorderLayout.CENTER);
 		mainWindow.add(leftMargin,BorderLayout.WEST);
 		mainWindow.add(rightMargin,BorderLayout.EAST);
 		
-		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //kliknięcie zamnknięcia wyłącza okno
-		mainWindow.setVisible(true); //aby okno było widoczne, dla false jest niewidzialne
+		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		mainWindow.setVisible(true); 
 		
 	}
 	private void buildControlPanel() {
@@ -83,7 +82,7 @@ public class MainWindow {
 		pauseBtn = new JButton("pause");
 		structBtn = new JButton("structs");
 		startBtn = new JButton("start");
-		rowsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE); //tekst zachęty, ilość rzędów i kolumn, można usunąć scrollbary
+		rowsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE); 
 		columnsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE);
 		numOfGensTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
 		rowsLabel = new JLabel("rows:");
@@ -93,14 +92,12 @@ public class MainWindow {
 		speedSlider = new JSlider(1,10,5);
 		currentSpeedLabel = new JLabel("5");
 		
-		
 		//to jest tylko po to aby ButtonClickListener mogl obslugiwac te przyciski bez dostepu do nich bezposrednio
 		goHomeBtn.setActionCommand("goHomeBtn");
 		pauseBtn.setActionCommand("pauseBtn");
 		structBtn.setActionCommand("structBtn");
 		startBtn.setActionCommand("startBtn");
 		
-		//wszystkie actions listenery:
 		goHomeBtn.addActionListener(new ButtonClickListener());
 		pauseBtn.addActionListener(new ButtonClickListener());
 		structBtn.addActionListener(new ButtonClickListener());
@@ -108,9 +105,6 @@ public class MainWindow {
 		speedSlider.addChangeListener(new SliderChangeListener(this));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
-	//trzeba je dodać do controlPanel ale nie trzeba już bezpośrednio do mainWindow bo controlPanel 
-		//jest do niego dodany, więc i przyciski pośrednio są dodane
-	//mamy wyobrazoną siatkę a x, y to pozycje na niej a nie odległości, tutaj wszystko jest względne
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(0,15,0,15);
 		gbc.gridx = 0;
@@ -163,7 +157,7 @@ public class MainWindow {
 		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	//tak chyba wygodniej, tez zmniejszylem do 90%
 		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
 		
-		for(int i=0; i<rows; i++) //dodanie kazdego przycisku do JPanel'u 
+		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++) {
 				displayPanel.add(board.getCell(i, j));
 			}

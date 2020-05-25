@@ -10,7 +10,7 @@ public class WWActionListener implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		board.calculateNextStateGOL();
+		board.calculateNextStateWW();
 		board.updateBoard();
 	}
 

@@ -24,9 +24,10 @@ public class BoardClickListener implements ActionListener {
 				{
 					if(lastCommand != command)
 						stateChangeClock = board.getCell(i, j).getState();
-					board.getCell(i,j).setState((byte)(stateChangeClock++%4)); //5-1=4 to ilosc stanow do wyboru po odjeciu 4. czyli PADDING
+					stateChangeClock++;
+					board.getCell(i,j).setState((byte)(stateChangeClock%4));
 				}
-		lastCommand = command;	//przenioslem na dol zeby tamten if dzialal
+		lastCommand = command;
 	}
 
 }
