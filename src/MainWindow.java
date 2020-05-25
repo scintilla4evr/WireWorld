@@ -23,19 +23,17 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class MainWindow {
-	public static Dimension screenSize;
-	public static byte chosenGame = C.GOL;
+	public static byte chosenGame; //bedziemy chcieli pozbyc sie statica aby mozna bylo tworzyc niezalezne okna aplikacji co jest fajna mozliwoscia
 	public static int cellSideSize;
+	private static Timer golAnimationTimer;
+	private static Timer wwAnimationTimer;
+	
 	private int rows;
 	private int cols;
-	
 	private JFrame mainWindow;
 	private JPanel controlPanel;
 	private JPanel displayPanel; 
-	private JPanel leftMargin;
-	private JPanel rightMargin;
 	private Board board;
-	
 	private JButton goHomeBtn;
 	private JButton pauseBtn;
 	private JButton structBtn;
@@ -52,41 +50,57 @@ public class MainWindow {
 	private JRadioButton wwRB;
 	private JRadioButton golRB;
 	private ButtonGroup chooseGameBG;
-	
-	private static Timer golAnimationTimer;
-	private static Timer wwAnimationTimer;
 
 	public MainWindow() {
 		buildMainWindow();
 		buildRadioButtons();
 		buildControlPanel();
+		initAnimationTimers();
+		initBoard();
+		rebuildMainWindow(); //jest to odpowiedz na konflikty ktore bylo trudno pogodzic, chodzi o to aby odpowiednie elementy istnialy kiedy inne elementy ich potrzebuja
 		buildDisplayPanel();
-        initAnimationTimers();
 	}
-	private void buildMainWindow() {
+	
+	private void buildMainWindow() {		
 		mainWindow = new JFrame("Uniwersalny automat komorkowy"); 
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		mainWindow.setSize(screenSize);
-		mainWindow.setMaximumSize(screenSize);
+		//mainWindow.setMinimumSize(Toolkit.getDefaultToolkit().getScreenSize());
+		mainWindow.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
 		mainWindow.setLayout(new BorderLayout()); 
 		
 		controlPanel = new JPanel(new GridBagLayout()); 
 		displayPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,0)); 
-		leftMargin = new JPanel();
-		rightMargin = new JPanel();
-		
-		//leftMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height)); // tu bedzie zabawa aby odpowiednio dobrac te wartosci!
-		//rightMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height));
 	
 		mainWindow.add(controlPanel,BorderLayout.NORTH);
 		mainWindow.add(displayPanel,BorderLayout.CENTER);
-		mainWindow.add(leftMargin,BorderLayout.WEST);
-		mainWindow.add(rightMargin,BorderLayout.EAST);
-		
+
 		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		mainWindow.setVisible(true); 
-		
 	}
+	
+	private void buildRadioButtons() {
+		wwRB = new JRadioButton("WireWorld", true);
+		golRB = new JRadioButton("Game Of Life", false);
+		wwRB.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				chosenGame = C.WW;
+				golAnimationTimer.stop(); //by zatrzymac przy zmianie rodzaju gry
+				wwAnimationTimer.stop();
+			}
+		});
+		golRB.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				chosenGame = C.GOL;
+				golAnimationTimer.stop();
+				wwAnimationTimer.stop();
+			}
+		});
+		chooseGameBG = new ButtonGroup();
+		chooseGameBG.add(wwRB);
+		chooseGameBG.add(golRB);
+	}
+	
 	private void buildControlPanel() {
 		goHomeBtn = new JButton("go home");
 		pauseBtn = new JButton("pause");
@@ -164,47 +178,12 @@ public class MainWindow {
 		controlPanel.add(startBtn,gbc);
 		gbc.gridx = 9;
 		gbc.gridy = 0;
-		controlPanel.add(wwRB);
+		controlPanel.add(wwRB,gbc);
 		gbc.gridx = 9;
 		gbc.gridy = 1;
-		controlPanel.add(golRB);
+		controlPanel.add(golRB,gbc);
 	}
-	private void buildRadioButtons() {
-		wwRB = new JRadioButton("WireWorld", true);
-		golRB = new JRadioButton("Game Of Life", false);
-		wwRB.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				chosenGame = C.WW;
-			}
-		});
-		golRB.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				chosenGame = C.GOL;
-			}
-		});
-		chooseGameBG = new ButtonGroup();
-		chooseGameBG.add(wwRB);
-		chooseGameBG.add(golRB);
-		
-	}
-	private void buildDisplayPanel() { 
-		//board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
-		if(board == null)
-			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu
-		rows = board.getRows(); 
-		cols = board.getCols();
-		
-		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	//tak chyba wygodniej, tez zmniejszylem do 90%
-		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
-		
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<cols; j++) {
-				displayPanel.add(board.getCell(i, j));
-			}
-
-	}
+	
 	private void initAnimationTimers() {
 		golAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new ActionListener() {
 			@Override
@@ -221,18 +200,43 @@ public class MainWindow {
 			}
 		});
 	}
-	private void initSlider() {
-		
+	
+	private void initBoard() {
+		board = LoadBoardFromFile.loadBoardFromFile("exampleeeeeeeeeee.life"); 
+		if(board == null)
+			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu //musza istniec rowsTA i colsTA inaczej NullPointerException
+		rows = board.getRows(); 
+		cols = board.getCols();
 	}
+	
+	private void rebuildMainWindow() {
+		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height; //pobieram max wysokosc sprzetu bo chce ja maksymalnie wykorzystac
+		cellSideSize = (screenHeight-100)/rows; // uwaga: ta wartosc jest zaokraglona w dol, odejmuje wysokosc ControlPanel, 100 to zgadywana wysokosc ControlPanel i jest to zmiany bo zalezy od monitora
+		int frameWidth = cols * cellSideSize + 40; // kolejna liczna do zmiany +40, po prostu po jej dodaniu szerokosc byla pasujaca czyli cos zle liczy nadal szerokosc
+		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
+		mainWindow.setMinimumSize(new Dimension(frameWidth, screenHeight));
+		mainWindow.setMaximumSize(new Dimension(frameWidth, screenHeight));
+	}
+
+	private void buildDisplayPanel() { 
+		for(int i=0; i<rows; i++)
+			for(int j=0; j<cols; j++) {
+				displayPanel.add(board.getCell(i, j));
+			}
+	}
+	
 	public int getCurrentSpeedLabel() {
 		return Integer.parseInt(currentSpeedLabel.getText());
 	}
+	
 	public void setCurrentSpeedLabel(int currentSpeed) {
 		currentSpeedLabel.setText(String.valueOf(currentSpeed));
 	}
+	
 	public static Timer getGolAnimationTimer() {
 		return golAnimationTimer;
 	}
+	
 	public static Timer getWwAnimationTimer() {
 		return wwAnimationTimer;
 	}
