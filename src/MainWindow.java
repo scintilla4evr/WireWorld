@@ -6,11 +6,15 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.TextArea;
 import java.awt.Toolkit;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.Timer;
 
@@ -41,6 +45,9 @@ public class MainWindow {
 	private JLabel speedLabel;
 	private JLabel currentSpeedLabel;
 	private JSlider speedSlider;
+	private JRadioButton wwRB;
+	private JRadioButton golRB;
+	private ButtonGroup chooseGameBG;
 	
 	private static Timer golAnimationTimer;
 	private static Timer wwAnimationTimer;
@@ -49,9 +56,7 @@ public class MainWindow {
 		buildMainWindow();
 		buildControlPanel();
 		buildDisplayPanel();
-        golAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new GOLActionListener(board));
-        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new WWActionListener(board));
-        
+        initAnimationTimers();
 	}
 	private void buildMainWindow() {
 		mainWindow = new JFrame("Uniwersalny automat komorkowy"); 
@@ -104,6 +109,8 @@ public class MainWindow {
 		startBtn.addActionListener(new ButtonClickListener());
 		speedSlider.addChangeListener(new SliderChangeListener(this));
 		
+		buildRadioButtons();
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(0,15,0,15);
@@ -146,6 +153,32 @@ public class MainWindow {
 		gbc.gridx = 8;
 		gbc.gridy = 1;
 		controlPanel.add(startBtn,gbc);
+		gbc.gridx = 9;
+		gbc.gridy = 0;
+		controlPanel.add(wwRB);
+		gbc.gridx = 9;
+		gbc.gridy = 1;
+		controlPanel.add(golRB);
+	}
+	private void buildRadioButtons() {
+		wwRB = new JRadioButton("WireWorld", true);
+		golRB = new JRadioButton("Game Of Life");
+		wwRB.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				chosenGame = C.WW;
+			}
+		});
+		golRB.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				chosenGame = C.GOL;
+			}
+		});
+		chooseGameBG = new ButtonGroup();
+		chooseGameBG.add(wwRB);
+		chooseGameBG.add(golRB);
+		
 	}
 	private void buildDisplayPanel() { 
 		//board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
@@ -162,6 +195,10 @@ public class MainWindow {
 				displayPanel.add(board.getCell(i, j));
 			}
 
+	}
+	private void initAnimationTimers() {
+		golAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new GOLActionListener(board));
+        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new WWActionListener(board));
 	}
 	public int getCurrentSpeedLabel() {
 		return Integer.parseInt(currentSpeedLabel.getText());
