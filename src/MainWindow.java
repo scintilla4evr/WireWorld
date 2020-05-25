@@ -185,14 +185,14 @@ public class MainWindow {
 	}
 	
 	private void initAnimationTimers() {
-		golAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new ActionListener() {
+		golAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateGOL();
 				board.updateBoard();
 			}
 		});
-        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new ActionListener() {
+        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateWW();
