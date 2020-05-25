@@ -11,14 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -75,6 +68,7 @@ public class MainWindow {
 
 		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		mainWindow.setVisible(true); 
+		mainWindow.setResizable(false);
 	}
 	
 	private void buildRadioButtons() {
@@ -213,6 +207,7 @@ public class MainWindow {
 		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height; //pobieram max wysokosc sprzetu bo chce ja maksymalnie wykorzystac
 		cellSideSize = (screenHeight-100)/rows; // uwaga: ta wartosc jest zaokraglona w dol, odejmuje wysokosc ControlPanel, 100 to zgadywana wysokosc ControlPanel i jest to zmiany bo zalezy od monitora
 		int frameWidth = cols * cellSideSize + 40; // kolejna liczna do zmiany +40, po prostu po jej dodaniu szerokosc byla pasujaca czyli cos zle liczy nadal szerokosc
+		// FUN FACT: to co źle liczy WYSOKOŚĆ to pasek tytułowy!!
 		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
 		mainWindow.setMinimumSize(new Dimension(frameWidth, screenHeight));
 		mainWindow.setMaximumSize(new Dimension(frameWidth, screenHeight));
@@ -223,6 +218,8 @@ public class MainWindow {
 			for(int j=0; j<cols; j++) {
 				displayPanel.add(board.getCell(i, j));
 			}
+		
+		displayPanel.doLayout();
 	}
 	
 	public int getCurrentSpeedLabel() {
