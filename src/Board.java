@@ -53,14 +53,14 @@ public class Board {
 	}
 	
 	public void updateBoard() {
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<cols; j++)
+		for(int i=1; i<rows-1; i++)
+			for(int j=1; j<cols-1; j++)
 				board[i][j].updateState();
 	}
 	
 	public void calculateNextStateGOL() {
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<cols; j++)
+		for(int i=1; i<rows-1; i++)
+			for(int j=1; j<cols-1; j++)
 			{
 				int friendsWithStateON = countFriendsWithState(i, j, C.ON);
 				byte cellState = board[i][j].getState();
@@ -75,8 +75,8 @@ public class Board {
 	}
 	
 	public void calculateNextStateWW() {
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<cols; j++)
+		for(int i=1; i<rows-1; i++)
+			for(int j=1; j<cols-1; j++)
 			{
 				int friendsWithStateHEAD = countFriendsWithState(i, j, C.HEAD);
 				byte cellState = board[i][j].getState();

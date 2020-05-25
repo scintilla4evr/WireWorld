@@ -8,22 +8,22 @@ public class ButtonClickListener implements ActionListener {
 	// obsluguje przyciski z menu w MainWindow - mowi co sie stanie po kliknieciu
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		/*
+		
 		String command = e.getActionCommand();
 	
 		if(command.equals("goHomeBtn")) {
 			;
 		}
 		else if(command.equals("startBtn")) {
-			if(MainWindow.choosenGame == C.GOL)
+			if(MainWindow.chosenGame == C.GOL)
 			{
-				Timer GOLBoardRefreshTimer = new Timer(MainWindow.speed, new GOLActionListener());
-				GOLBoardRefreshTimer.start();
+				GOLActionListener golActionListener = new GOLActionListener(MainWindow.getBoard());
+		        new Timer(MainWindow.getCurrentSpeedLabel()*100 , golActionListener).start();
 			}
-			if(MainWindow.choosenGame == C.WW)
+			if(MainWindow.chosenGame == C.WW)
 			{
-				Timer WWBoardRefreshTimer = new Timer(MainWindow.speed, new WWActionListener());
-				WWBoardRefreshTimer.start();
+				WWActionListener wwActionListener = new WWActionListener(MainWindow.getBoard());
+		        new Timer(MainWindow.getCurrentSpeedLabel()*100 , wwActionListener).start();
 			}
 		}
 		else if(command.equals("pauseBtn")) {
@@ -32,7 +32,7 @@ public class ButtonClickListener implements ActionListener {
 		else if(command.equals("structBtn")) {
 			;
 			
-		} */
+		} 
 		
 	}
 }

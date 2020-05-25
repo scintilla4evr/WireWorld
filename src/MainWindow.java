@@ -3,7 +3,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.TextArea;
 import java.awt.Toolkit;
@@ -26,7 +25,7 @@ public class MainWindow {
 	private JPanel displayPanel; 
 	private JPanel leftMargin;
 	private JPanel rightMargin;
-	private Board board;
+	private static Board board;
 	
 	private JButton goHomeBtn;
 	private JButton pauseBtn;
@@ -39,13 +38,14 @@ public class MainWindow {
 	private JLabel columnsLabel;
 	private JLabel numOfGensLabel;
 	private JLabel speedLabel;
-	private JLabel currentSpeedLabel;
+	private static JLabel currentSpeedLabel;
 	private JSlider speedSlider;
 	
 	public MainWindow() {
 		buildMainWindow();
 		buildControlPanel();
 		buildDisplayPanel();
+	
 	}
 	
 	private void buildMainWindow() {
@@ -152,7 +152,7 @@ public class MainWindow {
 	}
 	
 	private void buildDisplayPanel() { 
-		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
+		//board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu
 		rows = board.getRows(); 
@@ -168,11 +168,17 @@ public class MainWindow {
 
 	}
 	
-	public int getCurrentSpeedLabel() {
+	public static int getCurrentSpeedLabel() {
 		return Integer.parseInt(currentSpeedLabel.getText());
 	}
 	public void setCurrentSpeedLabel(int currentSpeed) {
 		currentSpeedLabel.setText(String.valueOf(currentSpeed));
+	}
+	public static Board getBoard() {
+		return board;
+	}
+	public static void setBoard(Board board) {
+		MainWindow.board = board;
 	}
 	
 }
