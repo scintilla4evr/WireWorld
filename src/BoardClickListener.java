@@ -18,15 +18,13 @@ public class BoardClickListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<cols; j++)
+		for(int i=1; i<rows-1; i++)
+			for(int j=1; j<cols-1; j++)
 				if(command.equals(i+" "+j))
 				{
 					if(lastCommand != command)
 						stateChangeClock = board.getCell(i, j).getState();
-					stateChangeClock++;
-					
-					board.getCell(i,j).setState((byte)(stateChangeClock%4)); //5-1=4 to ilosc stanow do wyboru po odjeciu 4. czyli PADDING
+					board.getCell(i,j).setState((byte)(stateChangeClock++%4)); //5-1=4 to ilosc stanow do wyboru po odjeciu 4. czyli PADDING
 				}
 		lastCommand = command;	//przenioslem na dol zeby tamten if dzialal
 	}

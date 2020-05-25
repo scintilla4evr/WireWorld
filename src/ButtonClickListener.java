@@ -17,17 +17,22 @@ public class ButtonClickListener implements ActionListener {
 		else if(command.equals("startBtn")) {
 			if(MainWindow.chosenGame == C.GOL)
 			{
-				GOLActionListener golActionListener = new GOLActionListener(MainWindow.getBoard());
-		        new Timer(MainWindow.getCurrentSpeedLabel()*100 , golActionListener).start();
+				MainWindow.getGolAnimationTimer().start();
 			}
 			if(MainWindow.chosenGame == C.WW)
 			{
-				WWActionListener wwActionListener = new WWActionListener(MainWindow.getBoard());
-		        new Timer(MainWindow.getCurrentSpeedLabel()*100 , wwActionListener).start();
+				MainWindow.getWwAnimationTimer().start();
 			}
 		}
 		else if(command.equals("pauseBtn")) {
-			;
+			if(MainWindow.chosenGame == C.GOL)
+			{
+				MainWindow.getGolAnimationTimer().stop();
+			}
+			if(MainWindow.chosenGame == C.WW)
+			{
+				MainWindow.getWwAnimationTimer().stop();
+			}
 		}
 		else if(command.equals("structBtn")) {
 			;

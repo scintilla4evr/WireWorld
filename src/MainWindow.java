@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.Timer;
 
 public class MainWindow {
 	public static Dimension screenSize;
@@ -25,7 +26,7 @@ public class MainWindow {
 	private JPanel displayPanel; 
 	private JPanel leftMargin;
 	private JPanel rightMargin;
-	private static Board board;
+	private Board board;
 	
 	private JButton goHomeBtn;
 	private JButton pauseBtn;
@@ -38,18 +39,22 @@ public class MainWindow {
 	private JLabel columnsLabel;
 	private JLabel numOfGensLabel;
 	private JLabel speedLabel;
-	private static JLabel currentSpeedLabel;
+	private JLabel currentSpeedLabel;
 	private JSlider speedSlider;
 	
+	private static Timer golAnimationTimer;
+	private static Timer wwAnimationTimer;
+
 	public MainWindow() {
 		buildMainWindow();
 		buildControlPanel();
 		buildDisplayPanel();
-	
+        golAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new GOLActionListener(board));
+        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new WWActionListener(board));
+        
 	}
-	
 	private void buildMainWindow() {
-		mainWindow = new JFrame("Uniwersalny automat komórkowy"); 
+		mainWindow = new JFrame("Uniwersalny automat komorkowy"); 
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setSize(screenSize);
 //		mainWindow.setMinimumSize(screenSize);  //nie wiem czy to potrzebne
@@ -73,7 +78,6 @@ public class MainWindow {
 		mainWindow.setVisible(true); //aby okno było widoczne, dla false jest niewidzialne
 		
 	}
-	
 	private void buildControlPanel() {
 		goHomeBtn = new JButton("go home");
 		pauseBtn = new JButton("pause");
@@ -148,9 +152,7 @@ public class MainWindow {
 		gbc.gridx = 8;
 		gbc.gridy = 1;
 		controlPanel.add(startBtn,gbc);
-		
 	}
-	
 	private void buildDisplayPanel() { 
 		//board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
 		if(board == null)
@@ -167,18 +169,17 @@ public class MainWindow {
 			}
 
 	}
-	
-	public static int getCurrentSpeedLabel() {
+	public int getCurrentSpeedLabel() {
 		return Integer.parseInt(currentSpeedLabel.getText());
 	}
 	public void setCurrentSpeedLabel(int currentSpeed) {
 		currentSpeedLabel.setText(String.valueOf(currentSpeed));
 	}
-	public static Board getBoard() {
-		return board;
+	public static Timer getGolAnimationTimer() {
+		return golAnimationTimer;
 	}
-	public static void setBoard(Board board) {
-		MainWindow.board = board;
+	public static Timer getWwAnimationTimer() {
+		return wwAnimationTimer;
 	}
-	
+
 }

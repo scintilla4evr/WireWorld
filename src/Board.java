@@ -43,7 +43,7 @@ public class Board {
 				board[i][j] = new Cell(C.OFF, C.OFF); //na start wyłączona komórka
 				board[i][j].setActionCommand(i+" "+j);
 				board[i][j].addActionListener(bcl); //kazdemu przyciskowi dodajemy ActionListener
-				//board[i][j].setPreferredSize(d); //zwiazany z rozmiarem MainWindow				
+				board[i][j].setPreferredSize(d); //zwiazany z rozmiarem MainWindow				
 			}
 	}	
 	public void changeCellsSize(Dimension d) {
@@ -67,9 +67,11 @@ public class Board {
 				
 				if(cellState == C.OFF && friendsWithStateON == 3)
 					board[i][j].setNextState(C.ON);
+				else if(cellState == C.ON && friendsWithStateON != 2 && friendsWithStateON != 3)
+					board[i][j].setNextState(C.OFF);
 				else if(cellState == C.ON && (friendsWithStateON == 2 || friendsWithStateON == 3))
-						board[i][j].setNextState(C.ON);
-				else 
+					board[i][j].setNextState(C.ON);
+				else
 					board[i][j].setNextState(C.OFF);
 			}
 	}
@@ -99,19 +101,19 @@ public class Board {
 		int count = 0;
 		if(board[i][j-1].getState()==friendState)
 			count++;
-		else if(board[i][j+1].getState()==friendState)
+		if(board[i][j+1].getState()==friendState)
 			count++;
-		else if(board[i-1][j].getState()==friendState)
+		if(board[i-1][j].getState()==friendState)
 			count++;
-		else if(board[i+1][j].getState()==friendState)
+		if(board[i+1][j].getState()==friendState)
 			count++;
-		else if(board[i-1][j-1].getState()==friendState)
+		if(board[i-1][j-1].getState()==friendState)
 			count++;
-		else if(board[i-1][j+1].getState()==friendState)
+		if(board[i-1][j+1].getState()==friendState)
 			count++;
-		else if(board[i+1][j-1].getState()==friendState)
+		if(board[i+1][j-1].getState()==friendState)
 			count++;
-		else if(board[i+1][j+1].getState()==friendState)
+		if(board[i+1][j+1].getState()==friendState)
 			count++;
 		return count;
 	}
