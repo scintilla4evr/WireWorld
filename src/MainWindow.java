@@ -152,7 +152,7 @@ public class MainWindow {
 	}
 	
 	private void buildDisplayPanel() { 
-//		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
+		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu
 		rows = board.getRows(); 
